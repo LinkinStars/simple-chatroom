@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 	"net/http"
+	"time"
 )
 
 var (
@@ -41,19 +42,23 @@ func chatRoomHandle(w http.ResponseWriter, r *http.Request) {
 			log.Error(err)
 			return
 		}
+		time.Sleep(2 * time.Second)
 
 		// 处理消息
-		chatRoom.batchSendMessage(*message)
+		go chatRoom.batchSendMessage(*message)
 	}
 }
 
 // 群发消息
 func (*Room) batchSendMessage(message Message) {
 	log := zap.S()
-	for _, conn := range chatRoom.Connections {
+	for i := 0; i < len(chatRoom.Connections); i++ {
+		conn := chatRoom.Connections[i]
 		if err := conn.WriteJSON(message); err != nil {
-			log.Error(err)
+			log.Error("发送消息异常，移除连接")
 			conn.Close()
+			chatRoom.Connections = append(chatRoom.Connections[:i], chatRoom.Connections[i+1:]...)
+			i--
 		}
 	}
 }
