@@ -61,7 +61,11 @@ func (room *Room) ProcessTask() {
 			}
 		case m := <-room.send:
 			for c := range room.clientsPool {
-				c.send <- m
+				select {
+				case c.send <- m:
+				default:
+					break
+				}
 			}
 		}
 	}
