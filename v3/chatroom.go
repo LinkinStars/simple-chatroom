@@ -4,7 +4,6 @@ import (
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 	"net/http"
-	"time"
 )
 
 var (
@@ -56,14 +55,14 @@ func (room *Room) ProcessTask() {
 			room.clientsPool[c] = true
 		case c := <-room.unregister:
 			log.Info("当前有客户端离开")
-			delete(room.clientsPool, c)
+			if room.clientsPool[c] {
+				close(c.send)
+				delete(room.clientsPool, c)
+			}
 		case m := <-room.send:
-			time.Sleep(3 * time.Second)
 			for c := range room.clientsPool {
 				c.send <- m
 			}
-		default:
-			break
 		}
 	}
 }

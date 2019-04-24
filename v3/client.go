@@ -32,6 +32,7 @@ func (c *Client) SendMessage() {
 		if err := c.conn.WriteJSON(m); err != nil {
 			c.conn.Close()
 			chatRoom.unregister <- c
+			return
 		}
 	}
 }
