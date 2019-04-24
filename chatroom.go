@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/LinkinStars/golang-util/logger"
-	"github.com/LinkinStars/simple-chatroom/v2"
+	"github.com/LinkinStars/simple-chatroom/v3"
 )
 
 func main() {
@@ -10,6 +10,5 @@ func main() {
 	gu.InitEasyZapDefault("simple-chatroom")
 	// 启动！
 	//v1.StartChatRoom()
-	v2.StartChatRoom()
-	select {}
+	v3.StartChatRoom()
 }
