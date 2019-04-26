@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/LinkinStars/simple-chatroom/v3"
+	"github.com/LinkinStars/simple-chatroom/common"
 	"github.com/gorilla/websocket"
 	"math/rand"
 	"net/url"
@@ -12,11 +12,11 @@ import (
 
 type Sender struct {
 	conn *websocket.Conn
-	send chan v3.Message
+	send chan common.Message
 }
 
 func main() {
-	clients := createClients(10)
+	clients := createClients(1)
 	process(clients)
 }
 
@@ -31,7 +31,7 @@ func createClients(amount int) []*Sender {
 		}
 		sender := &Sender{
 			conn: c,
-			send: make(chan v3.Message, 128),
+			send: make(chan common.Message, 128),
 		}
 		go sender.loopSendMessage()
 		clients = append(clients, sender)
@@ -44,7 +44,7 @@ func process(clients []*Sender) {
 	// 设置随机种子
 	rand.Seed(time.Now().UnixNano())
 
-	clientsAmount := len(clients) - 1
+	clientsAmount := len(clients)
 
 	flag := 0
 	for {
@@ -59,7 +59,7 @@ func process(clients []*Sender) {
 
 // 写入消息
 func (sender *Sender) sendMessage(str string) {
-	message := v3.Message{
+	message := common.Message{
 		Token:   time.Now().Format(time.RFC3339),
 		Content: str,
 	}

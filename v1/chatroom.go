@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"github.com/LinkinStars/simple-chatroom/common"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 	"net/http"
@@ -36,7 +37,7 @@ func chatRoomHandle(w http.ResponseWriter, r *http.Request) {
 
 	for {
 		// 接收消息
-		message := &Message{}
+		message := &common.Message{}
 		if err := conn.ReadJSON(message); err != nil {
 			log.Error(err)
 			return
@@ -48,7 +49,7 @@ func chatRoomHandle(w http.ResponseWriter, r *http.Request) {
 }
 
 // 群发消息
-func (*Room) batchSendMessage(message Message) {
+func (*Room) batchSendMessage(message common.Message) {
 	log := zap.S()
 	for i := 0; i < len(chatRoom.Connections); i++ {
 		conn := chatRoom.Connections[i]

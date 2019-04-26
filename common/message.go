@@ -1,4 +1,4 @@
-package v2
+package common
 
 // 消息结构
 type Message struct {

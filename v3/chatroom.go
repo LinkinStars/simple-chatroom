@@ -1,6 +1,7 @@
 package v3
 
 import (
+	"github.com/LinkinStars/simple-chatroom/common"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 	"net/http"
@@ -21,7 +22,7 @@ type Room struct {
 	register    chan *Client
 	unregister  chan *Client
 	clientsPool map[*Client]bool
-	send        chan Message
+	send        chan common.Message
 }
 
 // 处理所有websocket请求
@@ -36,7 +37,7 @@ func chatRoomHandle(w http.ResponseWriter, r *http.Request) {
 	// 创建客户端
 	c := &Client{
 		conn: conn,
-		send: make(chan Message, 128),
+		send: make(chan common.Message, 128),
 	}
 
 	go c.ReadMessage()
@@ -79,7 +80,7 @@ func StartChatRoom() {
 		register:    make(chan *Client),
 		unregister:  make(chan *Client),
 		clientsPool: map[*Client]bool{},
-		send:        make(chan Message),
+		send:        make(chan common.Message),
 	}
 	http.HandleFunc("/chatroom", chatRoomHandle)
 	go chatRoom.ProcessTask()
