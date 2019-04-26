@@ -16,7 +16,7 @@ type Sender struct {
 }
 
 func main() {
-	clients := createClients(1)
+	clients := createClients(10)
 	process(clients)
 }
 
@@ -44,7 +44,7 @@ func process(clients []*Sender) {
 	// 设置随机种子
 	rand.Seed(time.Now().UnixNano())
 
-	clientsAmount := len(clients)
+	clientsAmount := len(clients) - 1
 
 	flag := 0
 	for {
