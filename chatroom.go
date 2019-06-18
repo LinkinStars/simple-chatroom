@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/LinkinStars/golang-util/logger"
+	"github.com/LinkinStars/golang-util/gu"
 	"github.com/LinkinStars/simple-chatroom/v3"
 	_ "net/http/pprof"
 )
