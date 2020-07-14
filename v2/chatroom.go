@@ -22,7 +22,7 @@ var (
 // 聊天室配置
 type Room struct {
 	Connections []*websocket.Conn // 连接池，保存所有连接用户
-	sync.RWMutex
+	*sync.RWMutex
 }
 
 // 处理所有websocket请求
